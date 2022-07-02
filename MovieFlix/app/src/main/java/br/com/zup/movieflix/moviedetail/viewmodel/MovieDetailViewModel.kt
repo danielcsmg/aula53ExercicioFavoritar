@@ -1,6 +1,8 @@
 package br.com.zup.movieflix.moviedetail.viewmodel
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +11,8 @@ import br.com.zup.movieflix.moviedetail.datasource.DirectorLocalDataSource
 import br.com.zup.movieflix.moviedetail.model.MovieWithDirectorModel
 import br.com.zup.movieflix.moviedetail.repository.MovieDetailRepository
 
-class MovieDetailViewModel : ViewModel() {
-    private val repository  = MovieDetailRepository(DirectorLocalDataSource())
+class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository  = MovieDetailRepository(DirectorLocalDataSource(application))
     private var _response : MutableLiveData<MovieWithDirectorModel> = MutableLiveData()
     val response : LiveData<MovieWithDirectorModel> = _response
 
@@ -20,6 +22,13 @@ class MovieDetailViewModel : ViewModel() {
         }catch (e:Exception){
             Log.e("Erro", e.message.toString())
         }
+    }
 
+    fun favoriteMovie(movie: Movie, isFavorite: Boolean){
+        return repository.favoriteMovie(movie, isFavorite)
+    }
+
+    fun getFavoriteMovie(movie: Movie): Boolean {
+        return repository.getFavoriteMovie(movie)
     }
 }

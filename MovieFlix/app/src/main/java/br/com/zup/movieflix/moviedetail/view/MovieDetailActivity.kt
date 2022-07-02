@@ -20,10 +20,12 @@ class MovieDetailActivity : AppCompatActivity() {
         observable()
         getPassedData()
     }
+
     private fun getPassedData(){
         val movie = intent.getParcelableExtra<Movie>(CHAVE_MOVIE)
         movie?.let { viewModel.getMovieWithDirector(it) }
     }
+
     private fun observable(){
         viewModel.response.observe(this){
             binding.imageView.setImageResource(it.movie.image)
@@ -31,6 +33,12 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.tvMovieSinopse.text = it.movie.sinopse
             binding.tvDirectorName.text = it.director.name
             binding.tvDirectorInfo.text = it.director.info
+
+            binding.stFavorite.isChecked = viewModel.getFavoriteMovie(it.movie)
+
+            binding.stFavorite.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.favoriteMovie(it.movie, isChecked)
+            }
         }
     }
 }

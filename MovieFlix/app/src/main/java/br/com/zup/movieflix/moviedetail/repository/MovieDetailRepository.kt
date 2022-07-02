@@ -17,4 +17,12 @@ class MovieDetailRepository (private val dataSource: DirectorLocalDataSource) {
         }
         return MovieWithDirectorModel(diretor,movie)
     }
+
+    fun favoriteMovie(movie: Movie, favorite: Boolean){
+        return dataSource.saveSharedPrefs(movie, favorite)
+    }
+
+    fun getFavoriteMovie(movie: Movie): Boolean {
+        return dataSource.getSharedPrefs(movie)
+    }
 }
